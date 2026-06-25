@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000);
     // Pull camera back on mobile so it fits the portrait screen better
-    camera.position.z = isMobile ? 550 : 280;
+    camera.position.z = isMobile ? 750 : 280;
 
     const coreGroup = new THREE.Group();
     scene.add(coreGroup);
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Adjust camera distance dynamically on resize
         if (window.innerWidth < 768) {
-            camera.position.z = 550;
+            camera.position.z = 750;
         } else {
             camera.position.z = 280;
         }
