@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Get Your Recommendation — AI Job Recommendation System{% endblock %}
+{% block nav_rec %}active{% endblock %}
+
+{% block content %}
+
+<!-- ============ PAGE HEADER ============ -->
+<section class="page-header">
+  <div class="container">
+    <span class="eyebrow"><i class="bi bi-magic"></i> Career Profile</span>
+    <h1>Tell us about <span class="text-gradient">yourself</span></h1>
+    <p>Fill in the details below as accurately as you can — the more complete your profile, the sharper your recommendation.</p>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="form-shell">
+
+      <!-- progress indicator -->
+      <div class="form-progress" data-reveal>
+        <div class="fp-step active" data-fp="1">
+          <div class="fp-dot">1</div><span class="fp-label">Personal</span>
+        </div>
+        <div class="fp-step" data-fp="2">
+          <div class="fp-dot">2</div><span class="fp-label">Academic</span>
+        </div>
+        <div class="fp-step" data-fp="3">
+          <div class="fp-dot">3</div><span class="fp-label">Professional</span>
+        </div>
+        <div class="fp-step" data-fp="4">
+          <div class="fp-dot">4</div><span class="fp-label">Generate</span>
+        </div>
+      </div>
+
+      <form id="recommendationForm" novalidate>
+
+        <!-- ===== Section 1: Personal Information ===== -->
+        <div class="form-card" data-reveal>
+          <div class="fc-head">
+            <div class="fc-num">01</div>
+            <div><h5>Personal Information</h5><p>Just the basics</p></div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="fullName">Full Name</label>
+              <input type="text" class="form-control" id="fullName" placeholder="e.g. Ananya Sharma" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="age">Age</label>
+              <input type="number" class="form-control" id="age" placeholder="22" min="15" max="80" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="gender">Gender</label>
+              <select class="form-select" id="gender">
+                <option value="">Select</option>
+                <option>Female</option>
+                <option>Male</option>
+                <option>Other</option>
+                <option>Prefer not to say</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="email">Email</label>
+              <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Section 2: Academic Information ===== -->
+        <div class="form-card" data-reveal>
+          <div class="fc-head">
+            <div class="fc-num">02</div>
+            <div><h5>Academic Information</h5><p>Your educational background</p></div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="educationLevel">Education Level</label>
+              <select class="form-select" id="educationLevel" required>
+                <option value="">Select level</option>
+                <option value="Bachelor">Bachelor</option>
+                <option value="Master">Master</option>
+                <option value="PhD">PhD</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="branch">Branch</label>
+              <input type="text" class="form-control" id="branch" placeholder="e.g. Computer Science">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="cgpaInput">CGPA <span class="text-muted">(out of 10)</span></label>
+              <input type="number" class="form-control" id="cgpaInput" placeholder="8.4" min="0" max="10" step="0.01">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="gradYear">Graduation Year</label>
+              <input type="number" class="form-control" id="gradYear" placeholder="2026" min="1980" max="2035">
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Section 3: Professional Information ===== -->
+        <div class="form-card" data-reveal>
+          <div class="fc-head">
+            <div class="fc-num">03</div>
+            <div><h5>Professional Information</h5><p>Skills, certifications &amp; experience</p></div>
+          </div>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="skillsInput">Skills</label>
+              <textarea class="form-control" id="skillsInput" rows="2" placeholder="Python, Machine Learning, SQL, Communication"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="certificationsInput">Certifications</label>
+              <textarea class="form-control" id="certificationsInput" rows="2" placeholder="AWS Certified, Google Data Analytics"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="interestsInput">Interests</label>
+              <textarea class="form-control" id="interestsInput" rows="2" placeholder="Artificial Intelligence, Product Design, Cloud Computing"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="experienceScore">Experience Score <span class="text-muted">(0–10)</span></label>
+              <div class="range-row">
+                <input type="range" id="experienceScore" min="0" max="10" step="0.5" value="5">
+                <span class="range-val" id="experienceScoreVal">5.0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Section 4: Generate ===== -->
+        <div class="form-card text-center" data-reveal>
+          <div class="fc-head" style="justify-content:center;">
+            <div class="fc-num">04</div>
+            <div><h5>Generate Recommendation</h5><p>We'll run your profile through the model</p></div>
+          </div>
+          <button type="submit" class="btn btn-primary generate-btn">
+            <i class="bi bi-stars"></i> Generate Recommendation
+          </button>
+          <p class="text-muted mt-3" style="font-size:13px;">Your profile is sent to the trained model and your results open on the dashboard.</p>
+          <div id="formError" class="error-box mt-3" style="display:none; text-align:left;"></div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FULLSCREEN LOADING OVERLAY ============ -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="ai-spinner"></div>
+    <div class="loading-step" data-step="0"><i class="bi bi-check-circle"></i> Analyzing Skills...</div>
+    <div class="loading-step" data-step="1"><i class="bi bi-check-circle"></i> Evaluating Academic Profile...</div>
+    <div class="loading-step" data-step="2"><i class="bi bi-check-circle"></i> Running AI Model...</div>
+    <div class="loading-step" data-step="3"><i class="bi bi-check-circle"></i> Matching Job Roles...</div>
+    <div class="loading-step" data-step="4"><i class="bi bi-check-circle"></i> Generating Recommendations...</div>
+    <div class="loading-progress"><div class="loading-progress-bar" id="loadingProgressBar"></div></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Page-specific wiring lives in script.js (initRecommendationForm)
+  document.addEventListener('DOMContentLoaded', function(){
+    if (window.CareerAI && window.CareerAI.initRecommendationForm) {
+      window.CareerAI.initRecommendationForm();
+    }
+  });
+</script>
+{% endblock %}

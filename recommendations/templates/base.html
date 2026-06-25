@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}AI Job Recommendation System{% endblock %}</title>
+<meta name="description" content="Get personalized job recommendations powered by Artificial Intelligence based on your education, skills, certifications, interests, and experience.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<!-- App styles -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+{% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+<!-- Custom Magnetic Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="site-nav" id="siteNav">
+  <div class="container">
+    <a href="/" class="brand">
+      <span class="brand-mark"><i class="bi bi-stars"></i></span>
+      <span>CareerAI</span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/#top" class="nav-link-item {% block nav_home %}{% endblock %}">Home</a></li>
+      <li><a href="/#features" class="nav-link-item">Features</a></li>
+      <li><a href="/recommendation/" class="nav-link-item {% block nav_rec %}{% endblock %}">Job Recommendation</a></li>
+      <li><a href="/dashboard/" class="nav-link-item {% block nav_dash %}{% endblock %}">Dashboard</a></li>
+      <li><a href="/#contact" class="nav-link-item">Contact</a></li>
+    </ul>
+
+    <div class="nav-cta">
+      <a href="/#contact" class="btn btn-outline btn-sm">Contact Us</a>
+      <a href="/recommendation/" class="btn btn-primary btn-sm">Get Started</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ PAGE CONTENT ============ -->
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="brand">
+          <span class="brand-mark"><i class="bi bi-stars"></i></span>
+          <span>CareerAI</span>
+        </span>
+        <p>AI-powered career guidance that reads your skills and experience, then points you to the job roles where you're most likely to thrive.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h6>Quick Links</h6>
+        <a href="/#top">Home</a>
+        <a href="/#features">Features</a>
+        <a href="/recommendation/">Recommendation</a>
+        <a href="/dashboard/">Dashboard</a>
+      </div>
+
+      <div class="footer-col">
+        <h6>Resources</h6>
+        <a href="/#about">How It Works</a>
+        <a href="/#why">Why Choose Us</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/#contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <h6>Get In Touch</h6>
+        <a href="#"><i class="bi bi-envelope me-2"></i>support@careerai.example</a>
+        <a href="#"><i class="bi bi-geo-alt me-2"></i>Available worldwide, online</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 AI Job Recommendation System. All rights reserved.</span>
+      <span>Built with Django &amp; Machine Learning</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast for form feedback -->
+<div class="app-toast" id="appToast">
+  <i class="bi bi-check-circle-fill"></i>
+  <span id="appToastMsg">Done.</span>
+</div>
+
+<!-- Bootstrap JS bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<!-- GSAP & Three.js & Lenis -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+<!-- App scripts -->
+<script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/three_anim.js' %}"></script>
+
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

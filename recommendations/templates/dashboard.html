@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Your Dashboard — AI Job Recommendation System{% endblock %}
+{% block nav_dash %}active{% endblock %}
+
+{% block content %}
+
+<!-- ============ PAGE HEADER ============ -->
+<section class="page-header">
+  <div class="container">
+    <span class="eyebrow"><i class="bi bi-grid-1x2"></i> Your Results</span>
+    <h1>Your career <span class="text-gradient">dashboard</span></h1>
+    <p id="dashGreeting">Results from your most recent submission appear below.</p>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- ============ EMPTY STATE (shown if no prediction in this session) ============ -->
+    <div class="dash-empty" id="dashboardEmpty" style="display:none;">
+      <div class="dash-empty-icon"><i class="bi bi-clipboard-data"></i></div>
+      <h3>No recommendation yet</h3>
+      <p>Fill in your profile and run a prediction to see your personalized dashboard here.</p>
+      <a href="/recommendation/" class="btn btn-primary">
+        <i class="bi bi-stars"></i> Get Your Recommendation
+      </a>
+    </div>
+
+    <!-- ============ REAL DASHBOARD CONTENT (filled in by script.js) ============ -->
+    <div id="dashboardContent" style="display:none;">
+
+      <!-- ============ TOP RECOMMENDATION ============ -->
+      <div class="top-rec-card" data-reveal>
+        <div class="top-rec-left">
+          <span class="eyebrow"><i class="bi bi-trophy"></i> Top Recommendation</span>
+          <h2 class="top-rec-job" id="topRecJob">—</h2>
+          <p class="top-rec-sub" id="topRecSub"></p>
+        </div>
+        <div class="match-badge">
+          <div class="num" id="topRecMatch">—</div>
+          <div class="lbl">Match Score</div>
+        </div>
+      </div>
+
+      <!-- ============ THREE SUMMARY CARDS ============ -->
+      <div class="row g-4 mt-4">
+        <div class="col-md-4" data-reveal data-reveal-delay="1">
+          <div class="summary-card matched">
+            <h6><i class="bi bi-check-circle-fill"></i> Matched Skills</h6>
+            <ul id="matchedSkillsList"></ul>
+          </div>
+        </div>
+        <div class="col-md-4" data-reveal data-reveal-delay="2">
+          <div class="summary-card improve">
+            <h6><i class="bi bi-arrow-up-circle-fill"></i> Skills to Improve</h6>
+            <ul id="improveSkillsList"></ul>
+          </div>
+        </div>
+        <div class="col-md-4" data-reveal data-reveal-delay="3">
+          <div class="summary-card insights">
+            <h6><i class="bi bi-lightbulb-fill"></i> Career Insights</h6>
+            <ul id="careerInsightsList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TOP RECOMMENDED JOBS ============ -->
+      <div class="section-head mt-5" data-reveal>
+        <span class="eyebrow"><i class="bi bi-briefcase"></i> Recommended Roles</span>
+        <h2 class="section-title" style="font-size:28px;">Your ranked career matches</h2>
+      </div>
+
+      <div class="row g-4" id="jobCardsRow">
+        <!-- job cards injected here by script.js, one per model class -->
+      </div>
+
+      <!-- ============ LEARNING ROADMAP ============ -->
+      <div class="section-head mt-5 text-center" data-reveal>
+        <span class="eyebrow"><i class="bi bi-signpost-split"></i> Next Steps</span>
+        <h2 class="section-title" style="font-size:28px;">Your learning roadmap</h2>
+        <p class="section-subtitle mx-auto" id="roadmapSub"></p>
+      </div>
+
+      <div class="roadmap" id="roadmapList" data-reveal></div>
+
+      <!-- ============ CHARTS ============ -->
+      <div class="section-head mt-5" data-reveal>
+        <span class="eyebrow"><i class="bi bi-bar-chart"></i> Analysis</span>
+        <h2 class="section-title" style="font-size:28px;">Dashboard charts</h2>
+      </div>
+
+      <div class="row g-4 mb-3">
+        <div class="col-lg-7" data-reveal data-reveal-delay="1">
+          <div class="chart-card">
+            <h6>Career Match Breakdown</h6>
+            <p class="chart-sub">Your profile's compatibility score for every career class the model predicts.</p>
+            <div class="chart-wrap"><canvas id="skillBarChart"></canvas></div>
+          </div>
+        </div>
+        <div class="col-lg-5" data-reveal data-reveal-delay="2">
+          <div class="chart-card">
+            <h6>Recommendation Confidence</h6>
+            <p class="chart-sub">Same model output, shown as a confidence split.</p>
+            <div class="chart-wrap"><canvas id="confidenceDoughnut"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="model-meta-note" id="modelMetaNote"></p>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ JOB DETAILS MODAL ============ -->
+<div class="modal fade" id="jobModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="jobModalTitle">Job Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="jobModalBody">
+        <!-- filled by script.js -->
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    if (window.CareerAI && window.CareerAI.initDashboard) {
+      window.CareerAI.initDashboard();
+    }
+  });
+</script>
+{% endblock %}
