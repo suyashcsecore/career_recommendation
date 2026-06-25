@@ -5,19 +5,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const scene = new THREE.Scene();
     
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const isMobile = window.innerWidth < 768;
+    
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile, powerPreference: "high-performance" });
+    // Limit pixel ratio heavily on mobile to save GPU (many phones have huge ratios)
+    renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1) : Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000);
-    camera.position.z = 280;
+    // Pull camera back on mobile so it fits the portrait screen better
+    camera.position.z = isMobile ? 380 : 280;
 
     const coreGroup = new THREE.Group();
     scene.add(coreGroup);
 
     // --- Generate Infinity Loop (Figure-8) Points ---
-    const particleCount = 2500;
+    // Drastically reduce particle count on mobile for performance
+    const particleCount = isMobile ? 1200 : 2500;
     const basePositions = new Float32Array(particleCount * 3);
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -73,9 +78,9 @@ document.addEventListener("DOMContentLoaded", function() {
     particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    // Particle material (exact same as original)
+    // Particle material
     const pMaterial = new THREE.PointsMaterial({
-        size: 3.5,
+        size: isMobile ? 4.5 : 3.5, // slightly larger on mobile to compensate for fewer particles
         vertexColors: true,
         transparent: true,
         opacity: 0.85,
@@ -152,7 +157,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.addEventListener('resize', () => {
         if (!container) return;
+        
+        // Handle aspect ratio
         camera.aspect = container.clientWidth / container.clientHeight;
+        
+        // Adjust camera distance dynamically on resize
+        if (window.innerWidth < 768) {
+            camera.position.z = 380;
+        } else {
+            camera.position.z = 280;
+        }
+        
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
     });
