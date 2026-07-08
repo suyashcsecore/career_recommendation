@@ -63,7 +63,13 @@ class CareerRecommendationView(APIView):
         validated = serializer.validated_data
 
         # 1. Persist the incoming profile
-        profile = UserProfile.objects.create(**validated)
+        profile = None
+        profile_id = None
+        try:
+            profile = UserProfile.objects.create(**validated)
+            profile_id = profile.pk
+        except Exception as e:
+            logger.error("Failed to save profile (read-only DB or missing migrations): %s", e)
 
         # 2. Build the feature vector (same transform as training time)
         X_user = transform_user_input(validated, config.encoders)
@@ -84,28 +90,34 @@ class CareerRecommendationView(APIView):
         ranked = sorted(probabilities.items(), key=lambda x: x[1], reverse=True)
 
         # 5. Persist the prediction for audit / history
-        log = RecommendationLog.objects.create(
-            user_profile=profile,
-            predicted_career=predicted_career,
-            confidence=confidence,
-            probabilities=probabilities,
-        )
+        log_id = None
+        if profile is not None:
+            try:
+                log = RecommendationLog.objects.create(
+                    user_profile=profile,
+                    predicted_career=predicted_career,
+                    confidence=confidence,
+                    probabilities=probabilities,
+                )
+                log_id = log.pk
+            except Exception as e:
+                logger.error("Failed to save recommendation log: %s", e)
 
         logger.info(
             "Prediction: profile_id=%s → %s (%.2f%%)",
-            profile.pk, predicted_career, confidence * 100,
+            profile_id, predicted_career, confidence * 100,
         )
 
         return Response(
             {
-                "profile_id"      : profile.pk,
+                "profile_id"      : profile_id,
                 "predicted_career": predicted_career,
                 "confidence"      : f"{confidence:.2%}",
                 "ranked_careers"  : [
                     {"career": career, "probability": f"{prob:.2%}"}
                     for career, prob in ranked
                 ],
-                "log_id"          : log.pk,
+                "log_id"          : log_id,
             },
             status=status.HTTP_201_CREATED,
         )
