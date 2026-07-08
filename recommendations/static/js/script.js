@@ -418,14 +418,27 @@ window.CareerAI = (function () {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       }).then(function (res) {
-        return res.json().then(function (data) {
-          return { status: res.status, data: data };
-        });
+        var contentType = res.headers.get('content-type');
+        if (contentType && contentType.indexOf('application/json') !== -1) {
+          return res.json().then(function (data) {
+            return { status: res.status, data: data, isHtml: false };
+          });
+        } else {
+          return res.text().then(function (text) {
+            return { status: res.status, data: text, isHtml: true };
+          });
+        }
       });
 
       Promise.all([apiCall, animationDone]).then(function (results) {
         var result = results[0];
         if (overlay) overlay.classList.remove('show');
+
+        if (result.isHtml) {
+          showFormError('Server Error (' + result.status + ')', 'The server returned an HTML error page instead of JSON. Check the server logs (often caused by read-only databases or missing migrations).');
+          console.error("HTML Error Response:", result.data);
+          return;
+        }
 
         if (result.status === 503) {
           showFormError('No trained model available', 'Run <code>python manage.py train_model</code> on the server, then try again.');
